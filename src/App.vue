@@ -7,7 +7,6 @@
       <v-btn text rounded class="hidden-xs-only" to="/">Home</v-btn>
       <v-btn text rounded class="hidden-xs-only" to="/login">Login</v-btn>
       <v-btn text rounded class="hidden-xs-only" to="/register">Register</v-btn>
-      <v-btn text rounded class="hidden-xs-only" @click="handleSignOut" v-if="isLoggedIn">Sign Out</v-btn>
       <v-btn text rounded class="hidden-xs-only" to="/about">About</v-btn>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" absolute temporary>
@@ -32,13 +31,6 @@
               <v-icon>mdi-account</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Register</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item @click="handleSignOut" v-if="isLoggedIn">
-            <v-list-item-icon>
-              <v-icon>mdi-account</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Sign Out</v-list-item-title>
           </v-list-item>
 
           <v-list-item to="/about">
@@ -87,6 +79,7 @@ export default {
     },
     handleSignOut() {
       signOut(auth).then(() => {
+        console.log("Sign out pressed");
         this.$router.push('/')
       })
     },

@@ -6,6 +6,8 @@
       <v-spacer></v-spacer>
       <v-btn text rounded class="hidden-xs-only" to="/">Home</v-btn>
       <v-btn text rounded class="hidden-xs-only" to="/login">Login</v-btn>
+      <v-btn text rounded class="hidden-xs-only" to="/register">Register</v-btn>
+      <v-btn text rounded class="hidden-xs-only" @click="handleSignOut" v-if="isLoggedIn">Sign Out</v-btn>
       <v-btn text rounded class="hidden-xs-only" to="/about">About</v-btn>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" absolute temporary>
@@ -25,6 +27,20 @@
             <v-list-item-title>Login</v-list-item-title>
           </v-list-item>
 
+          <v-list-item to="/register">
+            <v-list-item-icon>
+              <v-icon>mdi-account</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Register</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item @click="handleSignOut" v-if="isLoggedIn">
+            <v-list-item-icon>
+              <v-icon>mdi-account</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Sign Out</v-list-item-title>
+          </v-list-item>
+
           <v-list-item to="/about">
             <v-list-item-icon>
               <v-icon>mdi-information</v-icon>
@@ -41,17 +57,39 @@
 </template>
 
 <script>
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth"
+
+let auth;
 
 export default {
   name: 'App',
 
   components: {
-    
+
   },
 
   data: () => ({
     drawer: false,
     group: null,
+    isLoggedIn: false,
   }),
+  methods: {
+    onMounted() {
+      auth = getAuth();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          this.isLoggedIn = true;
+        }
+        else {
+          this.isLoggedIn = false;
+        }
+      });
+    },
+    handleSignOut() {
+      signOut(auth).then(() => {
+        this.$router.push('/')
+      })
+    },
+  }
 };
 </script>
